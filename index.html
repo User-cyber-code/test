@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreamerStrom – Der Stromtarif für Streamer, Gamer und Vielverbraucher</title>
+<meta name="description" content="StreamerStrom: Ökostrom für Streaming-Setups, Gaming-PCs und Haushalte mit hohem Verbrauch. Lohnt sich ab 2.500 kWh im Jahr. Tarif berechnen und online wechseln.">
+<meta name="theme-color" content="#1a0f17">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Crect width='8' height='8' fill='%231a0f17'/%3E%3Cpath d='M4 1h2v1H4zM3 2h2v1H3zM2 3h4v1H2zM3 4h3v1H3zM3 5h2v1H3zM2 6h2v1H2z' fill='%23e6c34a'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/Bungee-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/Chivo-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Hallmark v2.0.0 · redesign · theme: arcade (by request: retro games) · arcade: oxblood/grille · genre: playful · shape: workbench · hero: head left, working control right · signature: the kWh counter you step yourself · deal: manual · sloplint: not run */
+/* critique: the counter is the one thing a visitor remembers; every figure on the page is the provider's own or computed in front of the visitor. */
+@font-face { font-family: "Bungee"; src: url("fonts/Bungee-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Chivo"; src: url("fonts/Chivo-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Silkscreen"; src: url("fonts/Silkscreen-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+:root {
+  --color-paper: oklch(16% 0.028 330); --color-paper-2: oklch(20.5% 0.03 330); --color-paper-3: oklch(25% 0.033 330);
+  --color-ink: oklch(95% 0.012 90); --color-ink-2: oklch(87% 0.016 90); --color-muted: oklch(74% 0.022 330);
+  --color-rule: oklch(36% 0.04 330);
+  --color-accent: oklch(83% 0.150 90); --color-accent-2: oklch(61% 0.205 25); --color-accent-ink: oklch(16% 0.028 330);
+  --color-focus: oklch(83% 0.150 90);
+  --color-crt-r: oklch(63% 0.24 25); --color-crt-g: oklch(80% 0.25 140); --color-crt-b: oklch(60% 0.24 265); --color-crt-c: oklch(78% 0.14 200); --color-shade: oklch(8% 0.02 330);
+  --font-display: "Bungee", "Impact", sans-serif; --font-body: "Chivo", ui-sans-serif, system-ui, sans-serif; --font-outlier: "Silkscreen", ui-monospace, monospace;
+  --radius-card: 4px; --rule-hair: 1px; --rule-bar: 2px;
+  --shadow-card: 6px 6px 0 var(--color-accent-2);
+  --text-display: clamp(2.2rem, 4.9vw, 4.25rem); --text-figure: clamp(2.5rem, 4.4vw, 3.5rem); --text-h2: clamp(1.75rem, 3.1vw, 2.75rem);
+  --text-h3: 1.25rem; --text-body: 1.0625rem; --text-small: 0.9375rem;
+  --space-xs: 8px; --space-sm: 12px; --space-md: 20px; --space-lg: 32px; --space-xl: 56px; --space-2xl: 104px;
+  --wrap: 1160px; --gutter: 20px;
+  --dur-micro: 90ms; --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { overflow-x: clip; scroll-behavior: smooth; scrollbar-color: var(--color-accent) var(--color-paper-2); }
+body { margin: 0; overflow-x: clip; background: var(--color-paper); color: var(--color-ink-2); font: 400 var(--text-body)/1.6 var(--font-body); caret-color: var(--color-accent); }
+::selection { background: var(--color-accent); color: var(--color-accent-ink); }
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+h1, h2, h3, p, ol, ul, dl, dd { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+h1, .display { font-family: var(--font-display); font-weight: 400; line-height: 1.02; text-transform: uppercase; color: var(--color-ink); overflow-wrap: break-word; min-width: 0; }
+h1 { font-size: var(--text-display); text-shadow: -1.5px 0 0 var(--color-crt-r), 1.5px 0 0 var(--color-crt-c); }
+h2 { font: 900 var(--text-h2)/1 var(--font-body); letter-spacing: -0.02em; color: var(--color-ink); text-wrap: balance; }
+h3 { font: 900 var(--text-h3)/1.15 var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); }
+a { color: var(--color-ink); text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+a:hover { color: var(--color-accent); }
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+section { padding-block: var(--space-2xl); }
+.section-head { max-width: 46rem; margin-bottom: var(--space-xl); }
+.section-head p { margin-top: var(--space-md); color: var(--color-muted); max-width: 60ch; }
+.figure { font: 700 var(--text-figure)/1 var(--font-outlier); font-variant-numeric: tabular-nums; color: var(--color-accent); }
+.skip { position: absolute; left: var(--gutter); top: -100px; z-index: 30; background: var(--color-accent); color: var(--color-accent-ink); padding: var(--space-sm) var(--space-md); font-weight: 700; }
+.skip:focus { top: var(--space-sm); }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Press surface */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: var(--space-sm) var(--space-lg); background: var(--color-accent); color: var(--color-accent-ink); border: var(--rule-bar) solid var(--color-ink); border-radius: var(--radius-card); font: 700 1rem/1.2 var(--font-body); text-decoration: none; cursor: pointer; box-shadow: var(--shadow-card); transition: translate var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out); }
+.btn:hover { color: var(--color-accent-ink); translate: -2px -2px; box-shadow: 8px 8px 0 var(--color-accent-2); }
+.btn:active { translate: 3px 3px; box-shadow: 2px 2px 0 var(--color-accent-2); }
+.btn--secondary { background: transparent; color: var(--color-ink); }
+.btn--secondary:hover { color: var(--color-ink); }
+.btn--small { white-space: nowrap; min-height: 44px; padding: var(--space-xs) var(--space-md); box-shadow: 4px 4px 0 var(--color-accent-2); }
+.btn--small:hover { box-shadow: 6px 6px 0 var(--color-accent-2); }
+
+/* CRT screen: grille and scanline, static, on wells and bands only */
+.crt { position: relative; isolation: isolate; }
+.crt::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
+  background-image:
+    repeating-linear-gradient(to right, color-mix(in oklab, var(--color-crt-r) 6%, transparent) 0 1px, color-mix(in oklab, var(--color-crt-g) 6%, transparent) 1px 2px, color-mix(in oklab, var(--color-crt-b) 6%, transparent) 2px 3px),
+    repeating-linear-gradient(to bottom, transparent 0 2px, color-mix(in oklab, var(--color-shade) 22%, transparent) 2px 3px); }
+.well { background: var(--color-paper-2); border: var(--rule-bar) solid var(--color-rule); border-radius: var(--radius-card); }
+
+/* Nav */
+.nav { position: sticky; top: 0; z-index: 20; background: var(--color-paper); border-bottom: var(--rule-bar) solid var(--color-rule); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); min-height: 68px; }
+.mark { display: inline-flex; align-items: center; gap: var(--space-sm); font: 400 1.25rem/1 var(--font-display); text-transform: uppercase; color: var(--color-ink); text-decoration: none; }
+.mark:hover { color: var(--color-ink); }
+.mark svg { width: 28px; height: 28px; fill: var(--color-accent); flex: none; }
+.mark span span { color: var(--color-accent); }
+.nav-links { display: flex; align-items: center; gap: var(--space-lg); }
+.nav-links a:not(.btn) { font-size: var(--text-small); font-weight: 700; text-decoration-color: transparent; }
+.nav-links a:not(.btn):hover { text-decoration-color: var(--color-accent); }
+
+/* Hero */
+.hero { padding-block: var(--space-xl) var(--space-2xl); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: var(--space-xl); align-items: center; }
+.hero-lede { margin-top: var(--space-lg); font-size: 1.1875rem; color: var(--color-ink-2); max-width: 34ch; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-md) var(--space-lg); margin-top: var(--space-lg); }
+.hero-head { animation: boot 420ms steps(5, end) both; }
+@keyframes boot { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* The counter (signature) */
+.counter { padding: var(--space-lg); }
+.counter > * { position: relative; z-index: 2; }
+.counter h2 { font-size: var(--text-h3); letter-spacing: -0.01em; }
+.counter-total { display: flex; align-items: baseline; gap: var(--space-sm); margin-top: var(--space-md); padding-bottom: var(--space-md); border-bottom: var(--rule-bar) solid var(--color-rule); }
+.counter-total .figure { font-size: clamp(3rem, 6vw, 4.5rem); }
+.counter-total .unit { font-weight: 700; color: var(--color-ink); }
+.counter-split { display: flex; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-sm); font-size: var(--text-small); font-weight: 700; color: var(--color-muted); }
+.counter-split b { color: var(--color-ink); font-variant-numeric: tabular-nums; }
+.steppers { margin-top: var(--space-md); }
+.steppers li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-sm); padding-block: var(--space-xs); border-top: var(--rule-hair) solid var(--color-rule); }
+.steppers li:first-child { border-top: 0; }
+.steppers .label { font-size: var(--text-small); font-weight: 700; color: var(--color-ink-2); }
+.stepper { display: grid; grid-template-columns: 44px 5.5rem 44px; align-items: center; }
+.stepper output { text-align: center; font-weight: 900; color: var(--color-ink); font-variant-numeric: tabular-nums; }
+.step { width: 44px; height: 44px; display: grid; place-items: center; background: var(--color-paper-3); color: var(--color-ink); border: var(--rule-bar) solid var(--color-ink); border-radius: var(--radius-card); font: 900 1.25rem/1 var(--font-body); cursor: pointer; box-shadow: 3px 3px 0 var(--color-accent-2); transition: translate var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out); }
+.step:hover { background: var(--color-accent); color: var(--color-accent-ink); }
+.step:active { translate: 2px 2px; box-shadow: 1px 1px 0 var(--color-accent-2); }
+.step:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+.counter-foot { margin-top: var(--space-md); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-sm) var(--space-md); }
+.counter-foot p { font-size: 0.8125rem; color: var(--color-muted); max-width: 26ch; line-height: 1.4; }
+
+/* Score line */
+.score { background: var(--color-paper-2); border-block: var(--rule-bar) solid var(--color-rule); padding-block: var(--space-xl); }
+.score > .wrap { position: relative; z-index: 2; }
+.score dl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); }
+.score .figure { font-size: clamp(2.5rem, 3.3vw, 2.75rem); display: block; }
+.score dl > div { padding-inline: var(--space-lg); border-left: var(--rule-bar) solid var(--color-rule); display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--space-sm); }
+.score dl > div:first-child { padding-left: 0; border-left: 0; }
+.score dl > div:nth-child(even) .figure { color: var(--color-accent-2); }
+.score dt { font-size: var(--text-small); font-weight: 700; color: var(--color-ink-2); line-height: 1.35; }
+.score .unit { display: block; margin-top: var(--space-xs); font: 700 1rem/1.2 var(--font-body); color: var(--color-ink); }
+.score-note { margin-top: var(--space-lg); color: var(--color-muted); font-size: var(--text-small); max-width: 70ch; }
+
+/* Menu rows */
+.menu { border-top: var(--rule-bar) solid var(--color-rule); }
+.menu > li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-lg); align-items: baseline; padding: var(--space-md) var(--space-md); border-bottom: var(--rule-hair) solid var(--color-rule); }
+.menu p { color: var(--color-muted); }
+.menu > li.cursor { background: var(--color-accent); border-bottom-color: var(--color-accent); }
+.menu > li.cursor h3, .menu > li.cursor p { color: var(--color-accent-ink); }
+
+/* Two players */
+.versus { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); }
+.player { padding: var(--space-lg); border-top: 8px solid var(--color-accent-2); }
+.player > * { position: relative; z-index: 2; }
+.player--lead { border-top-color: var(--color-accent); }
+.player .figure { color: var(--color-accent-2); display: block; margin-top: var(--space-sm); }
+.player--lead .figure { color: var(--color-accent); }
+.player .unit { font: 700 1rem var(--font-body); color: var(--color-ink); }
+.player dl { margin-top: var(--space-md); }
+.player dl > div { padding-block: var(--space-sm); border-top: var(--rule-hair) solid var(--color-rule); }
+.player dt { font-size: var(--text-small); font-weight: 700; color: var(--color-muted); }
+.player dd { font-weight: 700; color: var(--color-ink); }
+
+/* Ember band: the calculator */
+.band { background: var(--color-accent); color: var(--color-accent-ink); }
+.band .display { font-size: var(--text-display); color: var(--color-accent-ink); max-width: 14ch; }
+.band .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-xl); align-items: end; }
+.band p { font-weight: 700; max-width: 40ch; }
+.band .btn { margin-top: var(--space-md); background: var(--color-accent-ink); color: var(--color-accent); border-color: var(--color-accent-ink); }
+.band .btn:hover { color: var(--color-accent); }
+.band a:not(.btn) { color: var(--color-accent-ink); text-decoration-color: var(--color-accent-ink); }
+.kwh-hint { margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); border: var(--rule-bar) solid var(--color-accent-ink); border-radius: var(--radius-card); }
+.kwh-hint[hidden] { display: none; }
+.band.has-frame .wrap { grid-template-columns: minmax(0, 1fr); align-items: start; }
+.frame { background: var(--color-paper); border: var(--rule-bar) solid var(--color-accent-ink); border-radius: var(--radius-card); padding: var(--space-md); box-shadow: var(--shadow-card); width: fit-content; max-width: 100%; }
+.frame iframe { display: block; border: 0; max-width: 100%; background: var(--color-ink); }
+.frame-alt { margin-top: var(--space-md); font-size: var(--text-small); }
+
+/* Steps */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-lg); }
+.steps li { border-top: var(--rule-bar) solid var(--color-rule); padding-top: var(--space-md); }
+.steps li:nth-child(even) .figure { color: var(--color-accent-2); }
+.steps h3 { margin-top: var(--space-md); }
+.steps p { margin-top: var(--space-xs); color: var(--color-muted); }
+
+/* FAQ as a menu */
+.faq { border-top: var(--rule-bar) solid var(--color-rule); max-width: 54rem; }
+.faq details { border-bottom: var(--rule-hair) solid var(--color-rule); }
+.faq summary { display: flex; justify-content: space-between; align-items: center; gap: var(--space-md); min-height: 60px; padding: var(--space-sm) var(--space-md); cursor: pointer; list-style: none; font-weight: 900; font-size: 1.125rem; color: var(--color-ink); transition: background-color var(--dur-micro) steps(1); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 700 1.5rem/1 var(--font-outlier); color: var(--color-accent); flex: none; }
+.faq details[open] summary::after { content: "–"; }
+.faq summary:hover, .faq details[open] summary { background: var(--color-accent); color: var(--color-accent-ink); }
+.faq summary:hover::after, .faq details[open] summary::after { color: var(--color-accent-ink); }
+.faq details p { padding: var(--space-md); color: var(--color-ink-2); max-width: 68ch; }
+
+/* Footer */
+footer { border-top: var(--rule-bar) solid var(--color-rule); padding-block: var(--space-xl); }
+.foot-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-md) var(--space-lg); }
+.foot-links { display: flex; flex-wrap: wrap; gap: var(--space-sm) var(--space-lg); font-size: var(--text-small); font-weight: 700; }
+.foot-links a { display: inline-flex; align-items: center; min-height: 44px; }
+.legal { margin-top: var(--space-lg); font-size: 0.8125rem; line-height: 1.55; color: var(--color-muted); max-width: 88ch; }
+.legal + .legal { margin-top: var(--space-sm); }
+
+@media (max-width: 900px) {
+  :root { --space-2xl: 72px; --space-xl: 40px; }
+  .hero .wrap, .band .wrap, .versus { grid-template-columns: minmax(0, 1fr); }
+  .band .wrap { align-items: start; gap: var(--space-lg); }
+  .nav-links a:not(.btn) { display: none; }
+  .score dl { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); row-gap: var(--space-lg); }
+  .score dl > div:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .menu > li { grid-template-columns: minmax(0, 1fr); gap: var(--space-xs); padding-inline: var(--space-sm); }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .hero-lede { max-width: none; }
+}
+@media (max-width: 520px) {
+  .mark { font-size: 1rem; }
+  .mark svg { width: 24px; height: 24px; }
+  .counter, .player { padding: var(--space-md); }
+  .stepper { grid-template-columns: 44px 4.75rem 44px; }
+  .hero-actions .btn, .band .btn { width: 100%; }
+  .score dl { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
+  .score dl > div { padding: var(--space-md) 0; border-left: 0; border-top: var(--rule-hair) solid var(--color-rule); }
+  .score dl > div:first-child { padding-top: 0; border-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-head { animation: none; }
+  .btn, .step, .faq summary { transition: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="StreamerStrom, zur Startseite">
+      <svg viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true"><path d="M4 0h3v1H4zM3 1h3v1H3zM2 2h3v1H2zM1 3h6v1H1zM3 4h3v1H3zM2 5h3v1H2zM1 6h3v1H1zM0 7h3v1H0z"/></svg>
+      <span>Streamer<span>Strom</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Hauptnavigation">
+      <a href="#vorteile">Vorteile</a>
+      <a href="#lohnt">Für wen</a>
+      <a href="#wechsel">Wechsel</a>
+      <a href="#faq">Fragen</a>
+      <a class="btn btn--small js-cta" href="#rechner">Tarif berechnen</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inhalt">
+  <span id="top"></span>
+
+  <!-- HERO: Kopf links, Zähler rechts -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-head">
+        <h1>Dein Setup frisst Strom.</h1>
+        <p class="hero-lede">Der Ökostromtarif für Streamer und Gamer. Lohnt sich ab 2.500&nbsp;kWh im Jahr.</p>
+        <div class="hero-actions">
+          <a class="btn js-cta" href="#rechner">Tarif berechnen</a>
+          <a class="btn btn--secondary" href="#vorteile">Vorteile ansehen</a>
+        </div>
+      </div>
+
+      <div class="well crt counter" aria-labelledby="counter-title">
+        <h2 id="counter-title">Was zieht dein Setup im Jahr?</h2>
+        <div class="counter-total" aria-live="polite">
+          <span class="figure" id="e-total">0</span><span class="unit">kWh im Jahr</span>
+        </div>
+        <div class="counter-split">
+          <span>Setup <b id="e-setup"></b></span>
+          <span>Haushalt <b id="e-home"></b></span>
+        </div>
+        <ul class="steppers">
+          <li><span class="label" id="l-watt">PC oder Konsole unter Last</span>
+            <div class="stepper" data-key="watt" role="group" aria-labelledby="l-watt"><button class="step" type="button" data-dir="-1" aria-label="weniger">−</button><output></output><button class="step" type="button" data-dir="1" aria-label="mehr">+</button></div></li>
+          <li><span class="label" id="l-peri">Monitore, Licht, Kamera</span>
+            <div class="stepper" data-key="peri" role="group" aria-labelledby="l-peri"><button class="step" type="button" data-dir="-1" aria-label="weniger">−</button><output></output><button class="step" type="button" data-dir="1" aria-label="mehr">+</button></div></li>
+          <li><span class="label" id="l-hours">Zocken oder Streamen am Tag</span>
+            <div class="stepper" data-key="hours" role="group" aria-labelledby="l-hours"><button class="step" type="button" data-dir="-1" aria-label="weniger">−</button><output></output><button class="step" type="button" data-dir="1" aria-label="mehr">+</button></div></li>
+          <li><span class="label" id="l-pers">Personen im Haushalt</span>
+            <div class="stepper" data-key="pers" role="group" aria-labelledby="l-pers"><button class="step" type="button" data-dir="-1" aria-label="weniger">−</button><output></output><button class="step" type="button" data-dir="1" aria-label="mehr">+</button></div></li>
+        </ul>
+        <div class="counter-foot">
+          <p>Richtwert. Genau steht es auf deiner Stromrechnung.</p>
+          <button class="btn btn--small" type="button" id="e-apply">Mit dem Wert rechnen</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCORE LINE: Zahlen des Versorgers -->
+  <section class="score crt" aria-labelledby="score-title">
+    <div class="wrap">
+      <h2 id="score-title" class="vh">Zahlen zum Versorger</h2>
+      <dl>
+        <div><dt>Versorger seit</dt><dd class="figure">1854</dd></div>
+        <div><dt>Kunden beim Versorger</dt><dd><span class="figure">800.000</span><span class="unit">und mehr</span></dd></div>
+        <div><dt>Energiepreisgarantie, bis zu</dt><dd><span class="figure">24</span><span class="unit">Monate</span></dd></div>
+        <div><dt>Ökostrom, von TÜV NORD zertifiziert</dt><dd><span class="figure">100</span><span class="unit">Prozent</span></dd></div>
+      </dl>
+      <p class="score-note">Geliefert wird von der SWK ENERGIE GmbH, den Stadtwerken Krefeld. Der Tarif heißt dort meinGAMING Strom.</p>
+    </div>
+  </section>
+
+  <!-- VORTEILE als Menü -->
+  <section id="vorteile">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Sechs Gründe für den Wechsel</h2>
+      </div>
+      <ul class="menu">
+        <li class="cursor"><h3>Günstig bei hohem Verbrauch</h3><p>Der Arbeitspreis ist besonders niedrig. Das zählt, wenn der Rechner stundenlang unter Last läuft.</p></li>
+        <li><h3>Preisgarantie bis 24 Monate</h3><p>Du wählst 12 oder 24 Monate Laufzeit und weißt, was der Strom kostet.</p></li>
+        <li><h3>100 Prozent Ökostrom</h3><p>Aus erneuerbaren Energien, mit Herkunftsnachweisen, zertifiziert durch die TÜV NORD CERT GmbH.</p></li>
+        <li><h3>Alles digital</h3><p>Vom Angebot bis zur Zählereingabe läuft alles online und papierlos.</p></li>
+        <li><h3>Ein Stadtwerk im Rücken</h3><p>Die Stadtwerke Krefeld versorgen seit 1854, heute deutschlandweit.</p></li>
+        <li><h3>Kundenservice mit Auszeichnung</h3><p>Der Service des Versorgers ist von TÜV SÜD ausgezeichnet.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ZWEI SPIELER: für wen es sich lohnt -->
+  <section id="lohnt" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Für wen sich der Tarif lohnt</h2>
+        <p>Der Grundpreis ist höher als bei manchen Tarifen, der Preis pro Kilowattstunde dafür besonders günstig. Das entscheidet dein Verbrauch.</p>
+      </div>
+      <div class="versus">
+        <div class="well crt player">
+          <h3>Wenig Verbrauch</h3>
+          <span class="figure">&lt; 2.500</span><span class="unit">kWh im Jahr</span>
+          <dl>
+            <div><dt>Der höhere Grundpreis</dt><dd>fällt stärker ins Gewicht</dd></div>
+            <div><dt>Der niedrige Arbeitspreis</dt><dd>bringt dir weniger</dd></div>
+            <div><dt>Nächster Zug</dt><dd>Preis mit deiner Rechnung vergleichen</dd></div>
+          </dl>
+        </div>
+        <div class="well crt player player--lead">
+          <h3>Viel Verbrauch</h3>
+          <span class="figure">2.500 +</span><span class="unit">kWh im Jahr</span>
+          <dl>
+            <div><dt>Der höhere Grundpreis</dt><dd>verteilt sich auf viele Kilowattstunden</dd></div>
+            <div><dt>Der niedrige Arbeitspreis</dt><dd>zahlt sich mit jeder Stunde aus</dd></div>
+            <div><dt>Nächster Zug</dt><dd>Tarif berechnen</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARIFRECHNER (Partner-Einbindung) -->
+  <section class="band" id="rechner">
+    <div class="wrap">
+      <p class="display" role="heading" aria-level="2">Preis berechnen. Direkt abschließen.</p>
+      <div id="tarif-body">
+        <p>Postleitzahl und Verbrauch eingeben, Tarif ansehen, online abschließen. Dein Vertrag läuft direkt über die SWK ENERGIE GmbH.</p>
+        <p class="kwh-hint" id="kwh-hint" hidden>Dein Richtwert: <span id="kwh-hint-val"></span> kWh im Jahr. Trag ihn im Rechner ein.</p>
+        <div id="tarif-action"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WECHSEL in drei Zügen -->
+  <section id="wechsel">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Wechsel in drei Zügen</h2>
+      </div>
+      <ol class="steps">
+        <li><span class="figure" aria-hidden="true">1</span><h3>Tarif berechnen</h3><p>Postleitzahl und Jahresverbrauch eingeben. Der passende Tarif steht sofort da.</p></li>
+        <li><span class="figure" aria-hidden="true">2</span><h3>Auftrag bestätigen</h3><p>Zählernummer und Adresse eintragen, absenden. Digital und papierlos.</p></li>
+        <li><span class="figure" aria-hidden="true">3</span><h3>Weiterzocken</h3><p>Der Versorger kündigt deinen alten Vertrag. Du bleibst lückenlos versorgt.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Fragen vor dem Wechsel</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Ab wann lohnt sich StreamerStrom?</summary>
+          <p>Wenn du über 2.500 kWh im Jahr brauchst – durchs Zocken, Streamen oder einfach, weil viele Geräte laufen. Ab da wird der Tarif laut Versorger richtig interessant.</p>
+        </details>
+        <details>
+          <summary>Warum ist der Grundpreis höher als bei anderen?</summary>
+          <p>Dafür ist der Arbeitspreis, also der Preis pro Kilowattstunde, besonders günstig. Unterm Strich lohnt sich das für alle, die viel verbrauchen – genau für diese Zielgruppe ist der Tarif gemacht.</p>
+        </details>
+        <details>
+          <summary>Muss ich meinen alten Vertrag selbst kündigen?</summary>
+          <p>Nein, das übernimmt der Versorger für dich. Nur wenn du selbst schon gekündigt hast oder ein Sonderkündigungsrecht nutzt, gibst du das beim Abschluss an.</p>
+        </details>
+        <details>
+          <summary>Kann ich mitten im Jahr wechseln?</summary>
+          <p>Ja. Bist du in der Grundversorgung oder ziehst um, kannst du jederzeit wechseln. Bei einem laufenden Vertrag erfolgt der Wechsel zum Vertragsende – auf Wunsch inklusive Kündigung beim bisherigen Anbieter.</p>
+        </details>
+        <details>
+          <summary>Wie lange dauert der Wechsel?</summary>
+          <p>In der Regel 2 bis 6 Wochen, je nachdem, wann dein aktueller Vertrag endet. Der Strom fließt dabei durchgehend, ohne Unterbrechung.</p>
+        </details>
+        <details>
+          <summary>Was passiert mit meinem Stromzähler?</summary>
+          <p>Nichts, der bleibt, wo er ist. Du bekommst deinen Strom nur von einem anderen Anbieter.</p>
+        </details>
+        <details>
+          <summary>12 oder 24 Monate Laufzeit?</summary>
+          <p>12 Monate passen, wenn du flexibel bleiben willst. 24 Monate lohnen sich, wenn du dir den günstigen Preis länger sichern möchtest – vor allem bei höherem Verbrauch.</p>
+        </details>
+        <details>
+          <summary>Was brauche ich für den Abschluss?</summary>
+          <p>Deine korrekte Zählernummer, deine Adresse und deinen geschätzten Jahresverbrauch. Den Rest übernimmt der Versorger.</p>
+        </details>
+        <details>
+          <summary>Wer ist mein Vertragspartner?</summary>
+          <p>Dein Stromvertrag kommt mit der SWK ENERGIE GmbH (Stadtwerke Krefeld) zustande, Tarif „meinGAMING Strom“. StreamerStrom vermittelt den Tarif und ist selbst kein Energieversorger.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="mark" href="#top" aria-label="StreamerStrom, nach oben">
+        <svg viewBox="0 0 8 8" shape-rendering="crispEdges" aria-hidden="true"><path d="M4 0h3v1H4zM3 1h3v1H3zM2 2h3v1H2zM1 3h6v1H1zM3 4h3v1H3zM2 5h3v1H2zM1 6h3v1H1zM0 7h3v1H0z"/></svg>
+        <span>Streamer<span>Strom</span></span>
+      </a>
+      <nav class="foot-links" aria-label="Rechtliches">
+        <!-- TODO: echte Seiten anlegen -->
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a class="js-cta" href="#rechner">Tarif berechnen</a>
+      </nav>
+    </div>
+    <p class="legal">StreamerStrom ist ein Vermittlungsangebot und kein Energieversorger. Der Stromliefervertrag kommt ausschließlich mit der SWK ENERGIE GmbH zustande (Tarif „meinGAMING Strom“). Für eine erfolgreiche Vermittlung erhalten wir eine Provision vom Versorger, für dich entstehen dadurch keine Mehrkosten. Alle Angaben zum Tarif stammen vom Versorger; maßgeblich sind die Preise und Bedingungen, die dir im Tarifrechner beim Abschluss angezeigt werden.</p>
+    <p class="legal">© <span id="year"></span> StreamerStrom</p>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   KONFIGURATION – Partner-Einbindung meinGAMING Strom
+   ---------------------------------------------------------------------
+   partnerId : deine Partner-ID (steckt im Werbelink und in den Rechnern)
+   useIframe : true  = Tarifrechner wird direkt auf der Seite eingebettet
+               false = Buttons führen über den Werbelink zum Rechner
+   Zum Testen ohne Code-Änderung:  ?rechner=iframe  an die Adresse hängen.
+   ===================================================================== */
+const CONFIG = {
+  partnerId: "bf5b95836f0eaa72b65a3cdd69c92a33",
+  useIframe: false
+};
+CONFIG.werbelink = "https://www.meingaming.de/kwk/" + CONFIG.partnerId;
+CONFIG.iframeXl  = "https://www.meingaming.de/iframeRechnerXl.html?pp=" + CONFIG.partnerId; // 770 x 600
+CONFIG.iframeSm  = "https://www.meingaming.de/iframeRechnerSm.html?pp=" + CONFIG.partnerId; // 300 x 250
+
+const $ = id => document.getElementById(id);
+const nf = new Intl.NumberFormat("de-DE");
+const useIframe = CONFIG.useIframe || new URLSearchParams(location.search).get("rechner") === "iframe";
+const wideMq = window.matchMedia("(min-width: 900px)");
+
+/* ---------- Tarifrechner ---------- */
+function el(tag, props, text) {
+  const e = Object.assign(document.createElement(tag), props || {});
+  if (text) e.textContent = text;
+  return e;
+}
+function partnerLink(a) {
+  a.href = CONFIG.werbelink; a.target = "_blank"; a.rel = "noopener sponsored";
+}
+function renderRechner() {
+  const slot = $("tarif-action");
+  slot.textContent = "";
+  $("rechner").classList.toggle("has-frame", useIframe);
+  if (useIframe) {
+    const wide = wideMq.matches;
+    const frame = el("div", { className: "frame" });
+    frame.appendChild(el("iframe", {
+      src: wide ? CONFIG.iframeXl : CONFIG.iframeSm,
+      width: wide ? 770 : 300, height: wide ? 600 : 250,
+      title: "meinGAMING Strom Tarifrechner", loading: "lazy"
+    }));
+    slot.appendChild(frame);
+    const alt = el("p", { className: "frame-alt" }, "Rechner wird nicht angezeigt? ");
+    const a = el("a", {}, "Direkt beim Versorger öffnen");
+    partnerLink(a); alt.appendChild(a);
+    slot.appendChild(alt);
+  } else {
+    const a = el("a", { className: "btn" }, "Tarifrechner öffnen");
+    partnerLink(a);
+    slot.appendChild(a);
+    // Ohne Einbettung führen alle Haupt-Buttons direkt zum Werbelink
+    document.querySelectorAll(".js-cta").forEach(partnerLink);
+  }
+}
+renderRechner();
+if (useIframe) wideMq.addEventListener("change", renderRechner);
+
+/* ---------- Zähler: Verbrauch schätzen ---------- */
+// Richtwerte Haushaltsstrom ohne Gaming-Setup (kWh/Jahr) nach Personenzahl
+const HOME = { 1: 1500, 2: 2500, 3: 3300, 4: 4000, 5: 4800, 6: 5500 };
+const STATE = {
+  watt:  { v: 450, min: 100, max: 900, step: 50, fmt: v => nf.format(v) + " W" },
+  peri:  { v: 120, min: 0,   max: 400, step: 20, fmt: v => nf.format(v) + " W" },
+  hours: { v: 5,   min: 1,   max: 16,  step: 1,  fmt: v => v + " Std." },
+  pers:  { v: 2,   min: 1,   max: 6,   step: 1,  fmt: v => v + (v === 1 ? " Person" : " Pers.") }
+};
+let estTotal = 0;
+
+function estimate() {
+  const setup = Math.round((STATE.watt.v + STATE.peri.v) / 1000 * STATE.hours.v * 365);
+  const home = HOME[STATE.pers.v];
+  estTotal = Math.round((setup + home) / 50) * 50;
+  $("e-total").textContent = nf.format(estTotal);
+  $("e-setup").textContent = nf.format(setup) + " kWh";
+  $("e-home").textContent = nf.format(home) + " kWh";
+  document.querySelectorAll(".stepper").forEach(s => {
+    const st = STATE[s.dataset.key];
+    s.querySelector("output").textContent = st.fmt(st.v);
+    s.querySelector('[data-dir="-1"]').disabled = st.v <= st.min;
+    s.querySelector('[data-dir="1"]').disabled = st.v >= st.max;
+  });
+}
+document.querySelectorAll(".stepper .step").forEach(b => b.addEventListener("click", () => {
+  const st = STATE[b.parentElement.dataset.key];
+  st.v = Math.min(st.max, Math.max(st.min, st.v + st.step * +b.dataset.dir));
+  estimate();
+}));
+estimate();
+
+$("e-apply").addEventListener("click", () => {
+  $("kwh-hint-val").textContent = nf.format(estTotal);
+  $("kwh-hint").hidden = false;
+  $("rechner").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+$("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
